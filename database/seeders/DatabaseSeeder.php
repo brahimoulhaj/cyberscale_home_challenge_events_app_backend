@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
+use App\Models\Event;
 use Database\Seeders\Permissions\CrudPermissionSeeder;
 use Database\Seeders\Permissions\PermissionSeeder;
 use Illuminate\Database\Seeder;
@@ -17,6 +19,10 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(self::seeders());
+        $categories = Category::factory(10)->create();
+        foreach ($categories as $category) {
+            Event::factory(random_int(1, 3))->create(['category_id' => $category->id]);
+        }
     }
 
     public static function seeders()

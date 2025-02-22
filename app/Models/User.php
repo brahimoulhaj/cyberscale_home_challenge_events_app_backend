@@ -11,6 +11,9 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Validation\Rules\Enum;
@@ -23,6 +26,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     use Authorizable;
     use CanResetPassword;
     use HasApiTokens;
+    use HasFactory;
     use HasRelationships;
     use MustVerifyEmail;
     use Notifiable;
@@ -30,6 +34,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     public static $cacheKey = 'users';
 
     protected $fillable = [
+        'name',
         'email',
         'password',
     ];
@@ -174,10 +179,12 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     public function syncRoles(array $roles)
     {
         $roleIds = Role::whereIn(
-            'name', array_map(
+            'name',
+            array_map(
                 function (ROLE_ENUM $role) {
                     return $role->value;
-                }, $roles
+                },
+                $roles
             )
         )->get()->pluck('id');
         $this->roles()->sync($roleIds);
@@ -221,5 +228,15 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
         }
 
         return $rules;
+    }
+
+    public function eventsAsParticipant(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class, 'event_user', 'user_id', 'event_id');
+    }
+
+    public function eventsAsHost(): HasMany
+    {
+        return $this->hasMany(Event::class, 'user_id');
     }
 }
