@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\ROLE;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -18,12 +19,16 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
+        $user = User::factory()->create();
+        $user->assignRole(ROLE::USER);
+
         return [
-            'user_id' => User::factory(),
+            'user_id' => $user->id,
             'category_id' => fn () => Category::factory(),
             'title' => $this->faker->words(4, true),
+            'slug' => $this->faker->unique()->slug(),
             'description' => $this->faker->paragraph(4),
-            'date' => now()->subDays($this->faker->numberBetween(0, 30))->format('Y-m-d'),
+            'date' => now()->addDays($this->faker->numberBetween(0, 30))->format('Y-m-d'),
             'time' => $this->faker->randomElement([
                 '10:00:00',
                 '12:00:00',

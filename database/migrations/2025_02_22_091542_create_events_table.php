@@ -16,12 +16,12 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete(); // not event without a host
             $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete(); // event may be uncategorized
             $table->string('title');
+            $table->string('slug')->unique();
             $table->text('description')->default('');
             $table->date('date');
             $table->time('time');
             $table->unsignedInteger('max_participants')->min(1)->default(1);
             $table->string('location');
-            $table->string('map_location')->nullable();
             $table->timestamps();
         });
     }
