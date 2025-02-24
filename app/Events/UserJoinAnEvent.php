@@ -31,6 +31,7 @@ class UserJoinAnEvent implements ShouldBroadcast
     {
         return [
             new PrivateChannel("JoinEvent.{$this->event->user_id}"),
+            new PrivateChannel("JoinEvent.{$this->event->user_id}.{$this->event->slug}"),
         ];
     }
 }
