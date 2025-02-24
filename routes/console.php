@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 
@@ -19,3 +20,13 @@ Artisan::command(
         $this->comment(Inspiring::quote());
     }
 )->purpose('Display an inspiring quote');
+
+Artisan::command('event:join', function () {
+    $event = App\Models\Event::find(24);
+    $user = User::inRandomOrder()->first();
+
+    $event->participants()->attach($user->id);
+    $this->comment("UserJoinAnEvent::class ---> JoinEvent.{$event->user_id}");
+
+    broadcast(new \App\Events\UserJoinAnEvent($event, $user));
+});

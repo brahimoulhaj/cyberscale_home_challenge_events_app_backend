@@ -11,7 +11,10 @@ class EventController extends Controller
 {
     public function index()
     {
-        $events = Event::withCount('participants')->with('category')->paginate(10);
+        $events = Event::withCount('participants')
+            ->with(['category', 'participants:id', 'host'])
+            ->paginate(10)
+            ->withQueryString();
 
         return EventResource::collection($events);
     }

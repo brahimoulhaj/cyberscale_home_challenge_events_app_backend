@@ -79,7 +79,7 @@ Route::middleware('auth:api')->group(
             }
         );
 
-        Route::post('events/{event:slug}/join', JoinEventController::class)->name('events.join');
+        Route::post('events/{event}/join', JoinEventController::class)->name('events.join');
         Route::controller(EventController::class)->prefix('events')->name('events.')->group(function () {
             Route::post('/', 'store')->name('store');
             Route::put('/{event}', 'update')->name('update');
@@ -180,3 +180,6 @@ if (config('app.debug')) {
         }
     );
 }
+
+Broadcast::routes(['middleware' => ['auth:api']]);
+// Broadcast::routes(['middleware' => ['api', 'auth:sanctum']]);

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserJoinAnEvent;
 use App\Models\Event;
+use App\Notifications\JoinEvent;
 use Illuminate\Http\Request;
 
 class JoinEventController extends Controller
@@ -26,7 +28,6 @@ class JoinEventController extends Controller
         if ($event->participants()->where('user_id', $request->user()->id)->exists()) {
             $event->participants()->detach($request->user()->id);
 
-            // dispatch event (ws notification)
             return response()->json([
                 'success' => true,
                 'message' => "You left '".$event->title."' event",
@@ -34,9 +35,10 @@ class JoinEventController extends Controller
         }
 
         $event->participants()->attach($request->user()->id);
+        $event->host->notify(new JoinEvent(event: $event, participant: $request->user()));
 
-        // send email
-        // dispatch event (ws notification)
+        broadcast(new UserJoinAnEvent($event, $request->user()));
+
         return response()->json([
             'success' => true,
             'message' => "You joined '".$event->title."' event successfully.",
