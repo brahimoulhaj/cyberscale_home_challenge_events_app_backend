@@ -1,14 +1,14 @@
-## Getting Started
+# Cyberscale home challenge, events app backend
 
-# Tech Stack
+## Tech Stack
 
 - Auth : Sanctum
 - Events : Laravel Reverb
 - Mail Server: Logs
 
-# Setup
+## Setup
 
-## Reverb Environment
+### Reverb Environment
 
 ```bash
 cp .env.example .env
@@ -23,26 +23,34 @@ REVERB_PORT=8080
 REVERB_SCHEME=http
 ```
 
-## VSCode
+- If you are using Laravel Herd with SSL, example: `https://events.test`, use:
+
+```yml
+REVERB_HOST=event.test
+REVERB_PORT=8080
+REVERB_SCHEME=https
+```
+
+### VSCode
 
 - Install PHP CS FIXER
 
-## Roles & Permissions
+### Roles & Permissions
 
 - At the start of the project, you want to setup the roles and permissions.
 - You can do this by editing the `database/seeders/PermissionSeeder.php` file.
 
-## Users
+### Users
 
 - At the start of the project, you want to create default users.
 - You can do this by editing the `database/seeders/UserSeeder.php` file.
 
-## Get Started
+### Get Started
 
 - Run the following commands to get started.
 
 ```bash
-php artisan serve
+php artisan serve #skip this if you are using Laravel Herd
 ```
 
 ```bash

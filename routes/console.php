@@ -21,12 +21,12 @@ Artisan::command(
     }
 )->purpose('Display an inspiring quote');
 
-Artisan::command('event:join', function () {
-    $event = App\Models\Event::find(24);
-    $user = User::inRandomOrder()->first();
+// Artisan::command('event:join', function () {
+//     $event = App\Models\Event::find(24);
+//     $user = User::inRandomOrder()->first();
 
-    $event->participants()->attach($user->id);
-    $this->comment("UserJoinAnEvent::class ---> JoinEvent.{$event->user_id}");
+//     $event->participants()->attach($user->id);
+//     $this->comment("UserJoinAnEvent::class ---> JoinEvent.{$event->user_id}");
 
-    broadcast(new \App\Events\UserJoinAnEvent($event, $user));
-});
+//     broadcast(new \App\Events\UserJoinAnEvent($event, $user));
+// });
